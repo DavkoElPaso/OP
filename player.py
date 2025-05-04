@@ -12,11 +12,11 @@ class Player:
         self.moving_left = False
         self.frame = 0
         self.invul_time = 0
-        self.gravity = 0.8  # Reduced gravity for higher jumps
+        self.gravity = 0.8  # Snížená gravitace pro vyšší skoky
         self.on_ground = False
-        self.jump_force = -18  # Increased jump force
+        self.jump_force = -19  # Zvýšená síla skoku
 
-        # Load player images
+        # obrázky
         self.walkRight = [pygame.image.load("imgs/chuz1.png"), pygame.image.load("imgs/chuz2.png")]
         self.walkLeft = [pygame.image.load("imgs/chuz4.png"), pygame.image.load("imgs/chuz3.png")]
         self.char = pygame.image.load("imgs/stat.png")
@@ -29,12 +29,12 @@ class Player:
         was_on_ground = self.on_ground
         self.on_ground = False
 
-        # Apply gravity if not on ground
+        # gravitace, pokud je ve vzduchu
         if not self.on_ground:
             self.vel_y += self.gravity
             self.y += self.vel_y
 
-        # Sort obstacles by distance to player for more accurate collision detection
+        # Seřadíme překážky podle vzdálenosti od hráče, aby detekce kolizí byla přesnější
         sorted_obstacles = sorted(obstacles,
                               key=lambda obs: (obs.x - self.x) ** 2 + (obs.y - self.y) ** 2)
 
@@ -42,40 +42,40 @@ class Player:
             obs_rect = pygame.Rect(obs.x, obs.y, obs.obs.get_width(), obs.obs.get_height())
 
             if player_rect.colliderect(obs_rect):
-                # Vertical collision detection first
-                if self.vel_y > 0:  # Moving down
+                # Nejprve vertikální kolize
+                if self.vel_y > 0:  # Pohyb dolů
                     if player_rect.bottom > obs_rect.top and player_rect.top < obs_rect.top:
                         self.y = obs_rect.top - player_rect.height
                         self.vel_y = 0
                         self.on_ground = True
                         self.isJump = False
-                elif self.vel_y < 0:  # Moving up
+                elif self.vel_y < 0:  # Pohyb nahoru
                     if player_rect.top < obs_rect.bottom:
                         self.y = obs_rect.bottom
                         self.vel_y = 0
 
-                # Horizontal collision detection
-                player_rect = self.get_rect()  # Update player rect after vertical adjustments
+                # Horizontální kolize
+                player_rect = self.get_rect()  # Aktualizace rectu po vertikálním posunu
                 if player_rect.colliderect(obs_rect):
-                    if self.vel_y >= 0:  # Only check horizontal collisions when not jumping up
+                    if self.vel_y >= 0:  # Kontrola pouze při pádu, ne při výskoku
                         if player_rect.right > obs_rect.left and player_rect.centerx < obs_rect.centerx:
                             self.x = obs_rect.left - player_rect.width
                         elif player_rect.left < obs_rect.right and player_rect.centerx > obs_rect.centerx:
                             self.x = obs_rect.right
 
-        # Ground collision
+        # Kolize se zemí
         if self.y > 400:
             self.y = 400
             self.vel_y = 0
             self.on_ground = True
             self.isJump = False
 
-        # Prevent position jitter when standing still
+        # Zabrání cukání postavy při stání
         if self.on_ground and was_on_ground and abs(self.vel_y) < 1:
             self.vel_y = 0
 
     def move(self, keys):
-        # Horizontal movement
+        # Pohyb do stran
         if keys[pygame.K_d]:
             self.x += self.vel
             self.moving_right = True
@@ -88,7 +88,7 @@ class Player:
             self.moving_right = False
             self.moving_left = False
 
-        # Jumping
+        # Skok
         if keys[pygame.K_SPACE] and self.on_ground:
             self.vel_y = self.jump_force
             self.isJump = True

@@ -2,8 +2,8 @@ import pygame
 
 class Obs:
     def __init__(self, x, y):
-        self.x = x  # World x-position
-        self.y = y  # World y-position
+        self.x = x
+        self.y = y
         self.obs = pygame.image.load("imgs/obs.png")
 
     def draw(self, screen, scroll):

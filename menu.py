@@ -26,7 +26,7 @@ def main_menu():
         MENU_TEXT = get_font(70).render("Pivko SKS", True, "#b68f40")
         MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
 
-        # Display high scores and current scores if they exist
+        # skore
         try:
             with open('highscores.txt', 'r') as f:
                 high_scores = eval(f.read())

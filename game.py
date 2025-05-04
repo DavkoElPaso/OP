@@ -6,44 +6,43 @@ from menu import main_menu
 
 
 def main():
+    # Inicializace Pygame
     pygame.init()
     clock = pygame.time.Clock()
     FPS = 60
 
-    # Screen dimensions
+    # Rozměry obrazovky
     SCREEN_WIDTH = 1250
     SCREEN_HEIGHT = 600
 
-    # Initialize game components
+    # Inicializace herních komponent
     game_logic = GameLogic(SCREEN_WIDTH, SCREEN_HEIGHT)
     game_graphics = GameGraphics(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-    # Game loop
+    # Herní smyčka
     run = True
     while run:
         clock.tick(FPS)
 
-        # Handle events
+        # Zpracování událostí
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
-        # Get keyboard input
+        # Získání vstupu z klávesnice
         keys = pygame.key.get_pressed()
 
-        # Update game logic
+        # Aktualizace herní logiky
         remaining_time = game_logic.update(keys)
 
-        # Check for game completion
+        # Kontrola dokončení hry
         if remaining_time == -1:
-            # Game complete, return to main menu
+            # Hra dokončena, návrat do hlavního menu
             return main_menu()
 
-        # Render the game
+        # Vykreslení hry
         game_graphics.render_game(game_logic, remaining_time)
 
     pygame.quit()
 
 
-if __name__ == "__main__":
-    main()

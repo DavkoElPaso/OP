@@ -9,22 +9,21 @@ class GameGraphics:
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         pygame.display.set_caption("Pivko SKS")
 
-        # Load background images
+        # obrázky pozadí
         self.bg = pygame.image.load("imgs/pozadi.png").convert()
         self.bg_width = self.bg.get_width()
         self.grass = pygame.image.load("imgs/podlaha.png").convert()
         self.grass_width = self.grass.get_width()
         self.tiles = math.ceil(self.screen_width / self.bg_width) + 2
 
-        # Initialize font for UI
         self.font = pygame.font.Font(None, 36)
 
     def draw_background(self, scroll):
-        # Calculate the first tile position based on scroll
+        # pozice dlaždice pozadí, posun
         first_tile = math.floor(abs(scroll) / self.bg_width)
         offset = scroll % self.bg_width
 
-        # Draw background tiles
+        # Vykresli dlaždice pozadí
         for i in range(self.tiles):
             self.screen.blit(self.bg, ((i - 1) * self.bg_width + offset, 0))
             self.screen.blit(self.grass, ((i - 1) * self.grass_width + offset, 436))
@@ -48,39 +47,39 @@ class GameGraphics:
             coin.draw(self.screen, scroll)
 
     def draw_ui(self, remaining_time, level, score):
-        # Draw timer
+        # Vykresli časovač
         timer_text = self.font.render(f"Time: {remaining_time}", True, (255, 255, 255))
         self.screen.blit(timer_text, (10, 10))
 
-        # Draw score
+        # Vykresli skóre
         score_text = self.font.render(f"Level {level} Score: {score}", True, (255, 255, 255))
         self.screen.blit(score_text, (10, 50))
 
     def clear_screen(self):
-        self.screen.fill((0, 0, 0))
+        self.screen.fill((0, 0, 0))  # Vyčisti obrazovku (černá barva)
 
     def update_display(self):
-        pygame.display.update()
+        pygame.display.update()  # Aktualizuj displej
 
     def render_game(self, game_logic, remaining_time):
-        # Clear the screen
+        # Vyčisti obrazovku
         self.clear_screen()
 
-        # Get scroll position
+        # Získej posun (scroll)
         scroll = game_logic.get_scroll_position()
 
-        # Draw background
+        # Vykresli pozadí
         self.draw_background(scroll)
 
-        # Draw game objects
+        # Vykresli herní objekty
         self.draw_obstacles(game_logic.obstacles, scroll)
         self.draw_coin(game_logic.coin, scroll)
         self.draw_pivo(game_logic.pivo, scroll)
         self.draw_player(game_logic.player, scroll)
         self.draw_enemies(game_logic.enemies, scroll)
 
-        # Draw UI
+        # Vykresli UI
         self.draw_ui(remaining_time, game_logic.level, game_logic.level_scores[game_logic.level])
 
-        # Update display
+        # Aktualizuj displej
         self.update_display()
